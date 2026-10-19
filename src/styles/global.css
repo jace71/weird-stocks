@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-tabloid-red: #E10600;
+  --color-tabloid-yellow: #FFD400;
+  --color-tabloid-pink: #FF2E88;
+  --color-tabloid-cyan: #00A6D6;
+  --color-ink: #111111;
+  --color-newsprint: #F6F1E3;
+  --color-paper: #FFFFFF;
+  --color-up: #1FA34A;
+  --color-down: #E10600;
+
+  --font-headline: "Anton", "Bebas Neue", Impact, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --shadow-tabloid: 6px 6px 0 0 #111111;
+  --shadow-tabloid-lg: 10px 10px 0 0 #111111;
+}
