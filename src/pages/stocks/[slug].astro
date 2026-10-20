@@ -1,0 +1,97 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Disclaimer from '../../components/Disclaimer.astro';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const stocks = await getCollection('stocks');
+
+  return stocks.map((stock) => ({
+    params: { slug: stock.id },
+    props: { stock },
+  }));
+}
+
+interface Props {
+  stock: CollectionEntry<'stocks'>;
+}
+
+const { stock } = Astro.props;
+const { Content } = await render(stock);
+const publishedDate = stock.data.publishDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Layout title={`${stock.data.company} (${stock.data.ticker}) | Weird Stocks`}>
+  <main class="mx-auto max-w-5xl px-6 py-12 md:py-20">
+    <article>
+      <header class="border-4 border-ink bg-paper p-6 shadow-tabloid-lg md:p-12">
+        <a
+          href="/"
+          class="mb-8 inline-block font-mono text-sm font-bold uppercase tracking-wide text-tabloid-red hover:underline"
+        >
+          &larr; Back to Weird Stocks
+        </a>
+        <p class="mb-4 font-mono text-sm font-bold uppercase tracking-widest">
+          {stock.data.ticker} / {stock.data.exchange} / {stock.data.category}
+        </p>
+        <p class="mb-3 font-extrabold uppercase tracking-wide text-tabloid-red">{stock.data.kicker}</p>
+        <h1 class="font-headline text-5xl uppercase leading-[0.95] tracking-tight md:text-7xl">
+          {stock.data.headline}
+        </h1>
+        <p class="mt-6 text-xl leading-relaxed text-ink/80">{stock.data.summary}</p>
+        <dl class="mt-8 grid grid-cols-2 gap-5 border-t-2 border-ink pt-5 sm:grid-cols-3">
+          <div>
+            <dt class="font-mono text-xs font-bold uppercase tracking-wider text-ink/65">Company</dt>
+            <dd class="mt-1 font-bold">{stock.data.company}</dd>
+          </div>
+          <div>
+            <dt class="font-mono text-xs font-bold uppercase tracking-wider text-ink/65">Market cap</dt>
+            <dd class="mt-1 font-bold">{stock.data.marketCap}</dd>
+          </div>
+          <div>
+            <dt class="font-mono text-xs font-bold uppercase tracking-wider text-ink/65">Weird factor</dt>
+            <dd class="mt-1 font-bold">{stock.data.weirdFactor}/10</dd>
+          </div>
+          <div>
+            <dt class="font-mono text-xs font-bold uppercase tracking-wider text-ink/65">Published</dt>
+            <dd class="mt-1 font-bold">{publishedDate}</dd>
+          </div>
+          <div>
+            <dt class="font-mono text-xs font-bold uppercase tracking-wider text-ink/65">Featured</dt>
+            <dd class="mt-1 font-bold">{stock.data.featured ? 'Stock of the Week' : 'No'}</dd>
+          </div>
+        </dl>
+      </header>
+
+      <div class="profile-copy mt-10 max-w-3xl space-y-5 text-lg leading-relaxed">
+        <Content />
+      </div>
+
+      <div class="mt-10">
+        <Disclaimer />
+      </div>
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .profile-copy :global(p + p) {
+    margin-top: 1.25rem;
+  }
+
+  .profile-copy :global(h2),
+  .profile-copy :global(h3) {
+    margin-top: 2rem;
+    font-family: var(--font-headline);
+    font-size: 1.75rem;
+    text-transform: uppercase;
+  }
+  .profile-copy :global(a) {
+    color: var(--color-tabloid-red);
+    text-decoration: underline;
+  }
+</style>
