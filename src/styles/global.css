@@ -19,3 +19,20 @@
   --shadow-tabloid: 6px 6px 0 0 #111111;
   --shadow-tabloid-lg: 10px 10px 0 0 #111111;
 }
+
+@layer base {
+  ul:not([class]) {
+    margin-block: 1.25rem;
+    list-style: disc;
+    padding-inline-start: 1.35rem;
+    padding-top: 1rem;
+  }
+
+  ul:not([class]) li + li {
+    margin-top: 0.65rem;
+  }
+
+  ul:not([class]) li::marker {
+    color: var(--color-tabloid-red);
+  }
+}
