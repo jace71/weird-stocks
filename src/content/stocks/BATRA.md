@@ -29,7 +29,7 @@ The company is new, but the team is very old. The Braves started in Boston in 18
 
 Atlanta Braves Holdings became its own public company on July 18, 2023, when Liberty Media split it off.
 
-<h2>What it does now</li>
+<h2>What it does now</h2>
 
 The company owns the Braves, plus a real estate business built around them. It has two segments:
 
