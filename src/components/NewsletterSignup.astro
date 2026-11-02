@@ -1,0 +1,38 @@
+---
+const KIT_ACTION = "https://app.kit.com/forms/10133955/subscriptions";
+---
+
+<section
+  id="newsletter" class="border-4 border-ink bg-tabloid-red p-6 text-paper shadow-tabloid-lg md:flex md:items-center md:justify-between md:gap-10 md:p-10"
+  aria-labelledby="newsletter-heading"
+>
+  <div class="max-w-2xl">
+    <p class="mb-2 font-mono text-sm font-bold uppercase tracking-widest text-tabloid-yellow">
+      The weirdest ticker in your inbox
+    </p>
+    <h2 id="newsletter-heading" class="font-headline text-4xl uppercase leading-tight md:text-5xl">
+      Get the Weird Stocks newsletter
+    </h2>
+    <p class="mt-3 leading-relaxed text-paper/90">
+      Strange companies, bizarre market stories, and fresh stock profiles. No financial advice—just entertainment.
+    </p>
+  </div>
+  <form action={KIT_ACTION} method="post" class="mt-6 flex w-full max-w-xl flex-col gap-3 sm:flex-row md:mt-0">
+    <label class="sr-only" for="newsletter-email">Email address</label>
+    <input
+      id="newsletter-email"
+      class="min-w-0 flex-1 border-2 border-ink bg-paper px-4 py-3 text-ink placeholder:text-ink/60 focus:outline-2 focus:outline-offset-2 focus:outline-tabloid-yellow"
+      type="email"
+      name="email_address"
+      autocomplete="email"
+      required
+      placeholder="you@example.com"
+    />
+    <button
+      class="border-2 border-ink bg-tabloid-yellow px-6 py-3 font-extrabold uppercase text-ink shadow-tabloid transition-transform hover:-translate-y-0.5"
+      type="submit"
+    >
+      Subscribe
+    </button>
+  </form>
+</section>
