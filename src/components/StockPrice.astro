@@ -1,0 +1,94 @@
+---
+/**
+ * <StockPrice ticker="LUNR" exchange="NASDAQ" />
+ *
+ * Shows the last end-of-day close, the daily change, the "as of" date, and a
+ * small sparkline. Everything is computed at build time; the output is plain
+ * HTML + inline SVG (no JavaScript is shipped to the browser).
+ *
+ * If price data isn't available, it renders NOTHING (or the optional
+ * TradingView fallback if you pass fallback={true}).
+ */
+import { getPrice, sparklinePath } from "../lib/prices";
+import TradingViewMini from "./TradingViewMini.astro";
+
+interface Props {
+  ticker: string;
+  exchange?: string;
+  fallback?: boolean; // show the free TradingView mini chart when we have no data
+}
+
+const { ticker, exchange, fallback = false } = Astro.props;
+const price = await getPrice(ticker, exchange);
+
+// ---- formatting helpers ----
+const decimals = (n: number) => (Math.abs(n) < 1 ? 4 : 2); // penny stocks get more digits
+const money = (n: number) =>
+  n.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: decimals(n),
+    maximumFractionDigits: decimals(n),
+  });
+const signed = (n: number, digits: number) => `${n > 0 ? "+" : n < 0 ? "−" : "±"}${Math.abs(n).toFixed(digits)}`;
+const prettyDate = (iso: string) =>
+  new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC", // the API date is a trading day, don't shift it
+  });
+
+const W = 240;
+const H = 60;
+const path = price ? sparklinePath(price.history.map((p) => p.close), W, H) : "";
+const isDown = (price?.change ?? 0) < 0;
+const first = price?.history[0];
+const periodChangePct =
+  price && first && first.close !== 0 ? ((price.lastClose - first.close) / first.close) * 100 : null;
+---
+
+{price ? (
+  <aside class="border-2 border-ink p-4 my-6 font-mono" aria-label={`${ticker} recent price`}>
+    <div class="flex flex-wrap items-baseline justify-between gap-2">
+      <span class="text-xs uppercase tracking-widest">{ticker} · Last close</span>
+      <span class="text-xs">as of {prettyDate(price.asOf)}</span>
+    </div>
+
+    <div class="flex flex-wrap items-baseline gap-3 mt-1">
+      <span class="text-3xl font-bold">{money(price.lastClose)}</span>
+      {price.change !== null && price.changePct !== null && (
+        <span class={isDown ? "text-tabloid-red font-bold" : "font-bold"}>
+          {signed(price.change, decimals(price.lastClose))} ({signed(price.changePct, 2)}%)
+        </span>
+      )}
+    </div>
+
+    {path && (
+      <figure class="mt-3">
+        <svg
+          viewBox={`0 0 ${W} ${H}`}
+          width="100%"
+          height={H}
+          preserveAspectRatio="none"
+          role="img"
+          aria-label={`${ticker} closing prices, ${prettyDate(price.history[0].date)} to ${prettyDate(price.asOf)}`}
+          class={isDown ? "text-tabloid-red" : "text-ink"}
+        >
+          <path d={path} fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" />
+        </svg>
+        <figcaption class="text-xs mt-1">
+          {price.history.length} trading days
+          {periodChangePct !== null && <> · {signed(periodChangePct, 1)}% over the period</>}
+        </figcaption>
+      </figure>
+    )}
+
+    <p class="text-xs mt-3">
+      End-of-day data from <a href={price.source.url} class="underline" rel="noopener" target="_blank">{price.source.name}</a>.
+      Not real-time. Not investment advice.
+    </p>
+  </aside>
+) : fallback ? (
+  <TradingViewMini ticker={ticker} exchange={exchange} />
+) : null}

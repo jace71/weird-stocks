@@ -1,6 +1,7 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Disclaimer from '../../components/Disclaimer.astro';
+import StockPrice from '../../components/StockPrice.astro';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
@@ -66,6 +67,10 @@ const publishedDate = stock.data.publishDate.toLocaleDateString('en-US', {
           </div>
         </dl>
       </header>
+
+      <div class="mt-10">
+        <StockPrice ticker={stock.data.ticker} exchange={stock.data.exchange} fallback={true} />
+      </div>
 
       <div class="profile-copy mt-10 max-w-3xl space-y-5 text-lg leading-relaxed">
         <Content />

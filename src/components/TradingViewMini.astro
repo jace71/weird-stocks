@@ -1,0 +1,39 @@
+---
+/**
+ * <TradingViewMini ticker="HKHC" exchange="OTCQX" />
+ *
+ * FREE option: TradingView's "Mini Chart" widget (Web Component format).
+ * The browser loads the price and chart from TradingView, so it updates live
+ * without rebuilding the site. No API key needed.
+ *
+ * RULES (https://www.tradingview.com/policies/): keep TradingView's attribution
+ * exactly as the widget ships it. Don't hide, cover, or restyle the logo/link.
+ * Widget docs: https://www.tradingview.com/widget-docs/widgets/charts/mini-chart/
+ */
+interface Props {
+  ticker: string;
+  exchange?: string;
+}
+const { ticker, exchange = "" } = Astro.props;
+
+// Our frontmatter exchange -> TradingView's prefix.
+const ex = exchange.toUpperCase();
+const prefix =
+  ex === "NASDAQ" ? "NASDAQ" :
+  ex === "NYSE" ? "NYSE" :
+  ex.startsWith("OTC") || ex === "PINK" ? "OTC" :
+  ex === "NYSE AMERICAN" || ex === "AMEX" ? "AMEX" :
+  "";
+const tvSymbol = prefix ? `${prefix}:${ticker}` : ticker;
+---
+
+<div class="border-2 border-ink my-6" style="height: 220px;">
+  <tv-mini-chart symbol={tvSymbol} theme="light"></tv-mini-chart>
+</div>
+<p class="text-xs font-mono -mt-4 mb-6">
+  Chart by <a href={`https://www.tradingview.com/symbols/${tvSymbol.replace(":", "-")}/`} class="underline" rel="noopener" target="_blank">TradingView</a>.
+  Not investment advice.
+</p>
+
+<!-- is:inline keeps Astro from bundling TradingView's script; it loads straight from TradingView. -->
+<script is:inline type="module" src="https://widgets.tradingview-widget.com/w/en/tv-mini-chart.js"></script>
