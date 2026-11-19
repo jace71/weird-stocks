@@ -9,7 +9,7 @@ weirdFactor: 7
 marketCap: ""
 exchange: "NASDAQ"
 publishDate: 2026-10-22
-featured: true
+featured: false
 ---
 
 Most fans can only buy a ticket or a jersey. With Atlanta Braves Holdings, you can buy a piece of the team itself. The company split from Liberty Media in July 2023 and owns the Atlanta Braves along with the Battery Atlanta district next to their ballpark.

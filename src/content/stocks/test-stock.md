@@ -9,7 +9,7 @@ weirdFactor: 9
 marketCap: "$420 million"
 exchange: "NASDAQ"
 publishDate: 2026-10-19
-featured: true
+featured: false
 ---
 
 This entirely fabricated company is a test entry for the stocks collection.
