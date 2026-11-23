@@ -9,7 +9,7 @@ weirdFactor: 8
 marketCap: ""
 exchange: "NASDAQ"
 publishDate: 2026-11-18
-featured: true
+featured: false
 ---
 
 Most police gear is about stopping someone. Wrap Technologies sells a gadget that ties them up instead. Its main product, the BolaWrap 150, is a handheld device that shoots out a Kevlar tether to wrap around a person and hold them in place from a distance. And yes, the ticker is WRAP.
