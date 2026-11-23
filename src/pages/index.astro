@@ -17,48 +17,54 @@ const recentStocks = [...stocks]
 
 <Layout title={stockOfTheWeek ? `${stockOfTheWeek.data.company} | Weird Stocks` : 'Weird Stocks'}>
   <main class="mx-auto max-w-7xl px-6 py-12 md:py-20">
-    {stockOfTheWeek && (
-      <section
-        class="relative border-4 border-ink bg-paper p-6 shadow-tabloid-lg md:p-12"
-        aria-labelledby="stock-of-the-week"
-      >
-        <div class="mb-8 flex flex-wrap items-center gap-4">
-          <p
-            id="stock-of-the-week"
-            class="inline-block -rotate-2 bg-tabloid-red px-4 py-2 font-headline text-2xl uppercase text-paper shadow-tabloid"
-          >
-            Stock of the Week
-          </p>
-          <span class="font-mono text-sm font-bold uppercase tracking-widest">
-            {stockOfTheWeek.data.ticker} / {stockOfTheWeek.data.category}
-          </span>
-        </div>
-
-        <div class="absolute right-5 top-5 md:right-10 md:top-8">
-          <Starburst text="Shocking!" />
-        </div>
-
-        <p class="mb-3 pr-28 font-extrabold uppercase tracking-wide text-tabloid-red md:pr-36">
-          {stockOfTheWeek.data.kicker}
-        </p>
-        <h1 class="max-w-5xl pr-20 font-headline text-5xl uppercase leading-[0.95] tracking-tight md:pr-32 md:text-7xl lg:text-8xl">
-          {stockOfTheWeek.data.headline}
-        </h1>
-        <p class="mt-8 max-w-3xl text-lg leading-relaxed text-ink/80 md:text-xl">
-          {stockOfTheWeek.data.summary}
-        </p>
-        <div class="mt-8 flex flex-wrap gap-x-8 gap-y-3 border-t-2 border-ink pt-5 font-mono text-sm font-bold uppercase">
-          <p>Company: {stockOfTheWeek.data.company}</p>
-          <p>Weird Factor: {stockOfTheWeek.data.weirdFactor}/10</p>
-        </div>
-        <a
-          class="mt-8 inline-block border-2 border-ink bg-tabloid-yellow px-5 py-3 font-extrabold uppercase shadow-tabloid transition-transform hover:-translate-y-0.5"
-          href={`/stocks/${stockOfTheWeek.id}/`}
+    <div class="grid gap-12 lg:grid-cols-3 lg:items-start lg:gap-8">
+      {stockOfTheWeek && (
+        <section
+          class="relative min-w-0 border-4 border-ink bg-paper p-6 shadow-tabloid-lg md:p-12 lg:col-span-2"
+          aria-labelledby="stock-of-the-week"
         >
-          Read the full profile
-        </a>
-      </section>
-    )}
+          <div class="mb-8 flex flex-wrap items-center gap-4 lg:pr-36">
+            <p
+              id="stock-of-the-week"
+              class="inline-block -rotate-2 bg-tabloid-red px-4 py-2 font-headline text-2xl uppercase text-paper shadow-tabloid"
+            >
+              Stock of the Week
+            </p>
+            <span class="min-w-0 basis-full pr-40 font-mono text-sm font-bold uppercase tracking-widest md:basis-auto md:pr-0">
+              {stockOfTheWeek.data.ticker} / {stockOfTheWeek.data.category}
+            </span>
+          </div>
+
+          <div class="absolute right-5 top-5 md:right-10 md:top-8">
+            <Starburst text="Shocking!" />
+          </div>
+
+          <p class="mb-3 pr-28 font-extrabold uppercase tracking-wide text-tabloid-red sm:pr-36">
+            {stockOfTheWeek.data.kicker}
+          </p>
+          <h1 class="max-w-5xl pr-4 font-headline text-[1.8rem] uppercase leading-[0.95] tracking-tight sm:pr-12 md:pr-16 md:text-[2.7rem] lg:pr-8 lg:text-[3.6rem]">
+            {stockOfTheWeek.data.headline}
+          </h1>
+          <p class="mt-8 max-w-3xl text-lg leading-relaxed text-ink/80 md:text-xl">
+            {stockOfTheWeek.data.summary}
+          </p>
+          <div class="mt-8 flex flex-wrap gap-x-8 gap-y-3 border-t-2 border-ink pt-5 font-mono text-sm font-bold uppercase">
+            <p>Company: {stockOfTheWeek.data.company}</p>
+            <p>Weird Factor: {stockOfTheWeek.data.weirdFactor}/10</p>
+          </div>
+          <a
+            class="mt-8 inline-block border-2 border-ink bg-tabloid-yellow px-5 py-3 font-extrabold uppercase shadow-tabloid transition-transform hover:-translate-y-0.5"
+            href={`/stocks/${stockOfTheWeek.id}/`}
+          >
+            Read the full profile
+          </a>
+        </section>
+      )}
+
+      <div class="min-w-0 lg:sticky lg:top-6">
+        <NewsletterSignup />
+      </div>
+    </div>
 
     <section class="mt-16" aria-labelledby="recent-weird-stocks">
       <h2
@@ -82,8 +88,5 @@ const recentStocks = [...stocks]
         ))}
       </div>
     </section>
-
-    <NewsletterSignup />
-
   </main>
 </Layout>
