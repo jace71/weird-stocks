@@ -4,7 +4,9 @@
  * Add a card by appending to `teacherLessons`. `slug` must be the stock
  * profile id, lowercase, as in /stocks/msb/. Set `pdfHref` only when the
  * file is in `public/`. Leave `slidesHref` unset until a deck exists:
- * the page shows "Coming soon" and does not link it.
+ * the page shows "Coming soon" and does not link it. Set `slidesLabel`
+ * when the link makes a personal Google Slides copy. Set `slidesPdfHref`
+ * when a PDF of that deck is in `public/`.
  */
 
 export const teachersPageDescription =
@@ -40,6 +42,13 @@ export interface TeacherLesson {
   pdfHref?: string;
   /** Absolute URL of a Google Slides deck. Omit while the deck is unwritten. */
   slidesHref?: string;
+  /**
+   * Visible slides-button label. Set this when `slidesHref` makes a personal
+   * copy, for example "Google Slides · Make a copy".
+   */
+  slidesLabel?: string;
+  /** Public path to a PDF of the slide deck, for example /teachers/slides-msb.pdf */
+  slidesPdfHref?: string;
 }
 
 export interface TickerPrompt {
@@ -65,51 +74,58 @@ export const teacherLessons: TeacherLesson[] = [
     ready: true,
     order: 1,
     pdfHref: '/teachers/lesson-card-msb.pdf',
+    slidesHref:
+      'https://docs.google.com/presentation/d/1gNxcB89eiU0CNAK45kYjmPzB4jqijimiNX8Vn-ETyPE/copy',
+    slidesLabel: 'Google Slides · Make a copy',
+    slidesPdfHref: '/teachers/slides-msb.pdf',
   },
   {
     ticker: 'TPL',
     exchange: 'NYSE',
     company: 'Texas Pacific Land',
     slug: 'tpl',
-    title: '[TPL lesson title TBD]',
-    hook: '[Hook TBD. Based on the TPL profile: land as an asset.]',
+    title: 'Can dirt be a business?',
+    hook: "A NYSE-listed Texas landowner that doesn't pump any oil. It gets paid when others use its land: oil and gas royalties, water sales, and easements for pipelines and power lines.",
     concept: 'land',
     conceptName: 'Land as an asset',
     conceptBadge: 'Land',
     grades: '9–12',
-    time: '[TBD]',
-    ready: false,
+    time: '1 class (10-min activity)',
+    ready: true,
     order: 2,
+    pdfHref: '/teachers/lesson-card-tpl.pdf',
   },
   {
     ticker: 'SEB',
     exchange: 'NYSE American',
     company: 'Seaboard Corporation',
     slug: 'seb',
-    title: '[SEB lesson title TBD]',
-    hook: '[Hook TBD. Based on the SEB profile: what a conglomerate is.]',
+    title: 'What is a conglomerate?',
+    hook: 'One company that raises hogs, trades grain, ships cargo, and makes electricity on floating power plants. A single share has sold for thousands of dollars.',
     concept: 'conglomerates',
     conceptName: 'Conglomerates',
     conceptBadge: 'Conglomerates',
     grades: '9–12',
-    time: '[TBD]',
-    ready: false,
+    time: '1 class (10-min activity)',
+    ready: true,
     order: 3,
+    pdfHref: '/teachers/lesson-card-seb.pdf',
   },
   {
     ticker: 'FIZZ',
     exchange: 'NASDAQ',
     company: 'National Beverage Corp.',
     slug: 'fizz',
-    title: '[FIZZ lesson title TBD]',
-    hook: '[Hook TBD. Based on the FIZZ profile: brands and competition.]',
+    title: 'Why do brands matter?',
+    hook: 'The Nasdaq company behind LaCroix, Shasta, and Faygo. Larger rivals such as Coca-Cola and PepsiCo have more money, so the brand has to do the competing.',
     concept: 'brands',
     conceptName: 'Brands & competition',
     conceptBadge: 'Brands',
     grades: '9–12',
-    time: '[TBD]',
-    ready: false,
+    time: '1 class (10-min activity)',
+    ready: true,
     order: 4,
+    pdfHref: '/teachers/lesson-card-fizz.pdf',
   },
 ];
 

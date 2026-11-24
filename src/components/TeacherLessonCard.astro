@@ -49,15 +49,15 @@ const soonButtonClass = `${buttonClass} cursor-not-allowed bg-[#e9e4d6] text-ink
   <dl class="mb-4 grid grid-cols-3 border-2 border-ink">
     <div class="border-r-2 border-ink p-2">
       <dt class="mb-1 font-mono text-[10px] font-bold uppercase tracking-widest text-ink/65">Grades</dt>
-      <dd class="text-sm font-extrabold leading-tight">{lesson.grades}</dd>
+      <dd class="text-sm font-extrabold leading-tight wrap-break-word">{lesson.grades}</dd>
     </div>
     <div class="border-r-2 border-ink p-2">
       <dt class="mb-1 font-mono text-[10px] font-bold uppercase tracking-widest text-ink/65">Concept</dt>
-      <dd class="text-sm font-extrabold leading-tight">{lesson.conceptName}</dd>
+      <dd class="text-sm font-extrabold leading-tight wrap-break-word">{lesson.conceptName}</dd>
     </div>
     <div class="p-2">
       <dt class="mb-1 font-mono text-[10px] font-bold uppercase tracking-widest text-ink/65">Time</dt>
-      <dd class="text-sm font-extrabold leading-tight">{lesson.time}</dd>
+      <dd class="text-sm font-extrabold leading-tight wrap-break-word">{lesson.time}</dd>
     </div>
   </dl>
   <div class="mt-auto flex flex-wrap gap-2.5">
@@ -82,9 +82,15 @@ const soonButtonClass = `${buttonClass} cursor-not-allowed bg-[#e9e4d6] text-ink
         <a
           class={liveButtonClass}
           href={lesson.slidesHref}
-          aria-label={`Open the ${lesson.ticker} Google Slides deck`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={
+            lesson.slidesLabel
+              ? `Make your own Google Slides copy of the ${lesson.ticker} classroom deck. Opens in a new tab.`
+              : `Open the ${lesson.ticker} Google Slides deck in a new tab`
+          }
         >
-          Google Slides
+          {lesson.slidesLabel ?? 'Google Slides'}
         </a>
       ) : (
         <button
@@ -95,6 +101,17 @@ const soonButtonClass = `${buttonClass} cursor-not-allowed bg-[#e9e4d6] text-ink
         >
           Slides · Coming soon
         </button>
+      )
+    }
+    {
+      lesson.slidesPdfHref && (
+        <a
+          class={liveButtonClass}
+          href={lesson.slidesPdfHref}
+          aria-label={`Download the ${lesson.ticker} slides as a PDF`}
+        >
+          Slides (PDF)
+        </a>
       )
     }
   </div>

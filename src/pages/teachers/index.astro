@@ -21,10 +21,15 @@ for (const lesson of teacherLessons) {
       `Teacher lesson ${lesson.ticker} must link to a real lowercase stock slug. /stocks/${lesson.slug}/ is not a profile.`,
     );
   }
-  if (!lesson.pdfHref) continue;
-  const relative = lesson.pdfHref.replace(/^\//, '');
-  if (!existsSync(path.join(process.cwd(), 'public', relative))) {
-    throw new Error(`Teacher lesson ${lesson.ticker} PDF is missing at public/${relative}.`);
+  for (const file of [
+    { href: lesson.pdfHref, label: 'PDF' },
+    { href: lesson.slidesPdfHref, label: 'slides PDF' },
+  ]) {
+    if (!file.href) continue;
+    const relative = file.href.replace(/^\//, '');
+    if (!existsSync(path.join(process.cwd(), 'public', relative))) {
+      throw new Error(`Teacher lesson ${lesson.ticker} ${file.label} is missing at public/${relative}.`);
+    }
   }
 }
 
@@ -48,7 +53,7 @@ const steps = [
   },
   {
     title: 'Print or project',
-    body: 'Each card is one page as a PDF, or a short Google Slides deck you can copy and edit.',
+    body: 'Each card is one page as a PDF. When a deck is posted, copy it into your own Google Slides or download the slides as a PDF.',
   },
   {
     title: 'Discuss, then do',
@@ -68,7 +73,7 @@ const faqs = [
   {
     question: 'Is this free?',
     answer:
-      'Yes. Every lesson card, slide deck and game is free. The Mesabi Trust PDF is ready to download. The email signup sends the monthly lesson to adults. You do not need to sign up to download a lesson that is already posted, and the signup does not collect student information.',
+      'Yes. Every lesson card, slide deck and game is free. Four lesson PDFs are ready to download: Mesabi Trust, Texas Pacific Land, Seaboard, and National Beverage. The Mesabi Trust deck is available as your own Google Slides copy and as a PDF. The email signup sends the monthly lesson to adults. You do not need to sign up to download a lesson that is already posted, and the signup does not collect student information.',
     open: true,
   },
   {
@@ -271,7 +276,7 @@ const faqs = [
             Get one new lesson a month
           </h2>
           <p class="mt-3 leading-relaxed text-newsprint/85">
-            A new lesson card and a classroom game in your inbox each month. The Mesabi Trust PDF is free to download now. Other cards will show up here as they're written.
+            A new lesson card and a classroom game in your inbox each month. Four lesson PDFs are free to download now: Mesabi Trust, Texas Pacific Land, Seaboard, and National Beverage. The Mesabi Trust deck is ready as a Google Slides copy and a PDF.
           </p>
           <p class="mt-3 text-[13px] leading-relaxed text-newsprint/65">
             For teachers and other adults only. We don't collect student information. Unsubscribe anytime.
@@ -348,7 +353,7 @@ const faqs = [
       aria-label="Investment disclaimer"
     >
       <p>
-        <strong class="font-extrabold uppercase">Disclaimer:</strong>
+        <strong class="font-extrabold uppercase">Disclaimer:</strong>{' '}
         Weird Stocks is for entertainment and educational purposes only and is not investment advice.
         These lessons are not a recommendation to buy or sell any security.
         Do your own research before making financial decisions.
