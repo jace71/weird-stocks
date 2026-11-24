@@ -1,0 +1,107 @@
+---
+import type { TeacherLesson } from '../data/teacher-lessons';
+
+interface Props {
+  lesson: TeacherLesson;
+}
+
+const { lesson } = Astro.props;
+const profileHref = `/stocks/${lesson.slug}/`;
+
+const buttonClass =
+  'inline-block border-2 border-ink px-3 py-2 text-xs font-extrabold uppercase tracking-wide focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tabloid-red';
+const liveButtonClass = `${buttonClass} bg-tabloid-yellow shadow-tabloid transition-transform hover:-translate-y-0.5`;
+const soonButtonClass = `${buttonClass} cursor-not-allowed bg-[#e9e4d6] text-ink/60`;
+---
+
+<article
+  class:list={[
+    'flex h-full flex-col border-2 border-ink p-5 shadow-tabloid',
+    lesson.ready
+      ? 'bg-paper'
+      : 'border-dashed bg-[repeating-linear-gradient(135deg,var(--color-paper)_0_14px,#f1ecdf_14px_28px)]',
+  ]}
+  data-lesson
+  data-concept={lesson.concept}
+  data-concept-name={lesson.conceptName}
+  data-ticker={lesson.ticker}
+  data-order={lesson.order}
+  data-ready={lesson.ready ? '1' : '0'}
+>
+  {
+    !lesson.ready && (
+      <p class="mb-2.5 inline-block self-start bg-ink px-2 py-1 font-mono text-[11px] font-bold uppercase tracking-widest text-tabloid-yellow">
+        Placeholder · lesson not written yet
+      </p>
+    )
+  }
+  <div class="mb-2 flex items-start justify-between gap-4">
+    <span class="font-mono text-[13px] font-bold uppercase tracking-widest text-ink/70">
+      {lesson.exchange}: {lesson.ticker}
+    </span>
+    <span class="-rotate-2 shrink-0 border-2 border-ink bg-tabloid-yellow px-2.5 py-1 text-xs font-extrabold uppercase shadow-tabloid">
+      {lesson.conceptBadge}
+    </span>
+  </div>
+  <p class="mb-2 text-sm font-extrabold">{lesson.company}</p>
+  <h3 class="font-headline text-2xl uppercase leading-tight">{lesson.title}</h3>
+  <p class="mt-2.5 mb-3.5 text-[15px] leading-normal text-ink/80">{lesson.hook}</p>
+  <dl class="mb-4 grid grid-cols-3 border-2 border-ink">
+    <div class="border-r-2 border-ink p-2">
+      <dt class="mb-1 font-mono text-[10px] font-bold uppercase tracking-widest text-ink/65">Grades</dt>
+      <dd class="text-sm font-extrabold leading-tight">{lesson.grades}</dd>
+    </div>
+    <div class="border-r-2 border-ink p-2">
+      <dt class="mb-1 font-mono text-[10px] font-bold uppercase tracking-widest text-ink/65">Concept</dt>
+      <dd class="text-sm font-extrabold leading-tight">{lesson.conceptName}</dd>
+    </div>
+    <div class="p-2">
+      <dt class="mb-1 font-mono text-[10px] font-bold uppercase tracking-widest text-ink/65">Time</dt>
+      <dd class="text-sm font-extrabold leading-tight">{lesson.time}</dd>
+    </div>
+  </dl>
+  <div class="mt-auto flex flex-wrap gap-2.5">
+    {
+      lesson.pdfHref ? (
+        <a class={liveButtonClass} href={lesson.pdfHref} aria-label={`Download the ${lesson.ticker} lesson PDF`}>
+          PDF
+        </a>
+      ) : (
+        <button
+          type="button"
+          class={soonButtonClass}
+          disabled
+          aria-label={`${lesson.ticker} PDF, coming soon`}
+        >
+          PDF · Coming soon
+        </button>
+      )
+    }
+    {
+      lesson.slidesHref ? (
+        <a
+          class={liveButtonClass}
+          href={lesson.slidesHref}
+          aria-label={`Open the ${lesson.ticker} Google Slides deck`}
+        >
+          Google Slides
+        </a>
+      ) : (
+        <button
+          type="button"
+          class={soonButtonClass}
+          disabled
+          aria-label={`${lesson.ticker} Google Slides, coming soon`}
+        >
+          Slides · Coming soon
+        </button>
+      )
+    }
+  </div>
+  <a
+    class="mt-3.5 inline-block font-mono text-xs font-bold uppercase tracking-wide text-tabloid-red hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tabloid-red"
+    href={profileHref}
+  >
+    Read the {lesson.ticker} profile →
+  </a>
+</article>
