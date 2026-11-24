@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import Starburst from '../components/Starburst.astro';
 import StockCard from '../components/StockCard.astro';
 import NewsletterSignup from '../components/NewsletterSignup.astro';
+import { defaultDescription, websiteJsonLd } from '../lib/site';
 
 const stocks = await getCollection('stocks');
 const featuredStocks = stocks.filter(({ data }) => data.featured);
@@ -15,7 +16,11 @@ const recentStocks = [...stocks]
   .slice(0, 6);
 ---
 
-<Layout title={stockOfTheWeek ? `${stockOfTheWeek.data.company} | Weird Stocks` : 'Weird Stocks'}>
+<Layout
+  title={stockOfTheWeek ? `${stockOfTheWeek.data.company} | Weird Stocks` : 'Weird Stocks'}
+  description={defaultDescription}
+  jsonLd={websiteJsonLd()}
+>
   <main class="mx-auto max-w-7xl px-6 py-12 md:py-20">
     <div class="grid gap-12 lg:grid-cols-3 lg:items-start lg:gap-8">
       {stockOfTheWeek && (

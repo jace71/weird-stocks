@@ -1,43 +1,42 @@
-# Astro Starter Kit: Minimal
+# Weird Stocks
 
-```sh
-npm create astro@latest -- --template minimal
-```
+A tabloid-style archive of unusual public companies. Built with Astro and Tailwind, and deployed to AWS Amplify from `main`.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Production: https://www.weird-stocks.com
 
-## 🚀 Project Structure
+## Commands
 
-Inside of your Astro project, you'll see the following folders and files:
+| Command | Action |
+| :------ | :----- |
+| `npm install` | Installs dependencies |
+| `npm run dev` | Starts the local dev server at `localhost:4321` |
+| `npm run build` | Builds the production site to `./dist/` |
+| `npm run preview` | Previews the production build locally |
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Environment variables
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Copy `.env.example` to `.env` for local work. `.env` is gitignored and must not be committed.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### `MARKETSTACK_API_KEY`
 
-Any static assets, like images, can be placed in the `public/` directory.
+Server-side key for end-of-day prices, fetched at build time. It has no `PUBLIC_` prefix, so it is not sent to the browser. If the key is missing, stock pages still build and simply omit the price.
 
-## 🧞 Commands
+### `PUBLIC_GA_MEASUREMENT_ID`
 
-All commands are run from the root of the project, from a terminal:
+Optional Google Analytics 4 measurement ID, shaped like `G-XXXXXXXXXX`.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- When this variable is unset or blank at build time, the site does not render an analytics tag and does not load any Google script.
+- Astro inlines `PUBLIC_` variables during `npm run build`. A value in `.env` only affects local builds. For production, add `PUBLIC_GA_MEASUREMENT_ID` to this app's environment variables in the Amplify console, then rebuild. No change to `amplify.yml` is required.
+- A value that is not a `G-` measurement ID is ignored, and the build prints a warning.
 
-## 👀 Want to learn more?
+## Search and feeds
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+`npm run build` writes:
+
+- `sitemap-index.xml` and `sitemap-0.xml` (home, archive pages, and every stock profile)
+- `robots.txt`, which allows crawling and points at the sitemap index
+- `rss.xml`, a feed of stock profiles, newest first
+
+Share images are generated in the same build: `/og.png` for the site, and `/og/stocks/<slug>.png` for each profile. Pages also include canonical URLs, Open Graph and Twitter card tags, and JSON-LD (`WebSite` and `Organization` on the home page, `Article` on each stock profile).
+
+After a production deploy, submit `https://www.weird-stocks.com/sitemap-index.xml` in [Google Search Console](https://search.google.com/search-console).

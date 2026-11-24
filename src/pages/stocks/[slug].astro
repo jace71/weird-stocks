@@ -3,6 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import Disclaimer from '../../components/Disclaimer.astro';
 import StockPrice from '../../components/StockPrice.astro';
 import Layout from '../../layouts/Layout.astro';
+import { articleJsonLd, isoDate } from '../../lib/site';
 
 export async function getStaticPaths() {
   const stocks = await getCollection('stocks');
@@ -26,7 +27,15 @@ const publishedDate = stock.data.publishDate.toLocaleDateString('en-US', {
 });
 ---
 
-<Layout title={`${stock.data.company} (${stock.data.ticker}) | Weird Stocks`}>
+<Layout
+  title={`${stock.data.company} (${stock.data.ticker}) | Weird Stocks`}
+  description={stock.data.summary}
+  image={`/og/stocks/${stock.id}.png`}
+  imageAlt={`${stock.data.ticker}: ${stock.data.headline}`}
+  ogType="article"
+  publishedTime={isoDate(stock.data.publishDate)}
+  jsonLd={articleJsonLd(stock)}
+>
   <main class="mx-auto max-w-5xl px-6 py-12 md:py-20">
     <article>
       <header class="border-4 border-ink bg-paper p-6 shadow-tabloid-lg md:p-12">
