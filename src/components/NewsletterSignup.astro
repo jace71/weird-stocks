@@ -1,5 +1,5 @@
 ---
-const KIT_ACTION = "https://app.kit.com/forms/10133955/subscriptions";
+import { kitFormAction } from '../lib/newsletter';
 ---
 
 <section
@@ -17,7 +17,7 @@ const KIT_ACTION = "https://app.kit.com/forms/10133955/subscriptions";
       Strange companies, bizarre market stories, and fresh stock profiles. No financial advice—just entertainment.
     </p>
   </div>
-  <form action={KIT_ACTION} method="post" class="mt-6 flex w-full flex-col gap-3">
+  <form action={kitFormAction} method="post" class="mt-6 flex w-full flex-col gap-3">
     <label class="sr-only" for="newsletter-email">Email address</label>
     <input
       id="newsletter-email"

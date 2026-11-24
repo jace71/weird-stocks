@@ -87,6 +87,42 @@ export function websiteJsonLd() {
   };
 }
 
+export function teachersPageJsonLd(input: {
+  description: string;
+  lessons: { name: string; description: string; url: string }[];
+}) {
+  const pageUrl = `${siteOrigin}/teachers/`;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': `${pageUrl}#webpage`,
+    name: 'Weird Stocks for the Classroom',
+    description: input.description,
+    url: pageUrl,
+    isPartOf: { '@id': `${siteOrigin}/#website` },
+    inLanguage: 'en-US',
+    publisher: { '@id': `${siteOrigin}/#organization` },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: input.lessons.length,
+      itemListElement: input.lessons.map((lesson, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'LearningResource',
+          name: lesson.name,
+          description: lesson.description,
+          url: lesson.url.startsWith('http') ? lesson.url : `${siteOrigin}${lesson.url}`,
+          learningResourceType: 'Lesson plan',
+          educationalLevel: 'Grades 9–12',
+          isAccessibleForFree: true,
+          inLanguage: 'en-US',
+        },
+      })),
+    },
+  };
+}
+
 export function articleJsonLd(stock: CollectionEntry<'stocks'>) {
   const pageUrl = `${siteOrigin}/stocks/${stock.id}/`;
   const imageUrl = `${siteOrigin}/og/stocks/${stock.id}.png`;
