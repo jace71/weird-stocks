@@ -75,16 +75,12 @@ const recentStocks = [...stocks]
       </h2>
       <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {recentStocks.map((stock) => (
-          <a
-            class="block transition-transform hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tabloid-red"
+          <StockCard
+            ticker={stock.data.ticker}
+            headline={stock.data.headline}
+            weirdFactor={stock.data.weirdFactor}
             href={`/stocks/${stock.id}/`}
-          >
-            <StockCard
-              ticker={stock.data.ticker}
-              headline={stock.data.headline}
-              weirdFactor={stock.data.weirdFactor}
-            />
-          </a>
+          />
         ))}
       </div>
     </section>
