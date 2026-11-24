@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import StockCard from '../../components/StockCard.astro';
+import Layout from '../../layouts/Layout.astro';
+
+const stocks = (await getCollection('stocks')).sort((a, b) => {
+  const dateDiff = b.data.publishDate.getTime() - a.data.publishDate.getTime();
+  if (dateDiff !== 0) return dateDiff;
+  return a.data.ticker.localeCompare(b.data.ticker, 'en');
+});
+---
+
+<Layout title="All Weird Stocks">
+  <main class="mx-auto max-w-7xl px-6 py-12 md:py-20">
+    <h1
+      class="inline-block -rotate-1 bg-tabloid-yellow px-4 py-2 font-headline text-4xl uppercase shadow-tabloid md:text-5xl"
+    >
+      All Weird Stocks
+    </h1>
+    <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink/80">
+      The whole archive, newest stories first.
+    </p>
+    <div class="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {
+        stocks.map((stock) => (
+          <StockCard
+            ticker={stock.data.ticker}
+            category={stock.data.category}
+            company={stock.data.company}
+            headline={stock.data.headline}
+            weirdFactor={stock.data.weirdFactor}
+            href={`/stocks/${stock.id}/`}
+            stretch
+          />
+        ))
+      }
+    </div>
+  </main>
+</Layout>

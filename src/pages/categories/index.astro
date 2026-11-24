@@ -1,0 +1,196 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import StockCard from '../../components/StockCard.astro';
+import Layout from '../../layouts/Layout.astro';
+
+type Stock = CollectionEntry<'stocks'>;
+
+function categorySlug(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function byNewest(a: Stock, b: Stock) {
+  const dateDiff = b.data.publishDate.getTime() - a.data.publishDate.getTime();
+  if (dateDiff !== 0) return dateDiff;
+  return a.data.ticker.localeCompare(b.data.ticker, 'en');
+}
+
+const stocks = await getCollection('stocks');
+const grouped = new Map<string, Stock[]>();
+
+for (const stock of stocks) {
+  const list = grouped.get(stock.data.category) ?? [];
+  list.push(stock);
+  grouped.set(stock.data.category, list);
+}
+
+const usedSlugs = new Set<string>();
+const categories = [...grouped.entries()]
+  .map(([name, items]) => {
+    const base = categorySlug(name) || 'category';
+    let slug = base;
+    let suffix = 2;
+    while (usedSlugs.has(slug)) {
+      slug = `${base}-${suffix}`;
+      suffix += 1;
+    }
+    usedSlugs.add(slug);
+
+    return {
+      name,
+      slug,
+      count: items.length,
+      topWeird: Math.max(...items.map((stock) => stock.data.weirdFactor)),
+      stocks: [...items].sort(byNewest),
+    };
+  })
+  .sort((a, b) => a.name.localeCompare(b.name, 'en'));
+---
+
+<Layout title="Categories | Weird Stocks">
+  <main class="mx-auto max-w-7xl px-6 py-12 md:py-20">
+    <h1
+      class="inline-block -rotate-1 bg-tabloid-red px-4 py-2 font-headline text-4xl uppercase text-paper shadow-tabloid md:text-5xl"
+    >
+      Categories
+    </h1>
+    <p class="mt-6 max-w-3xl text-lg leading-relaxed text-ink/80">
+      Every weird stock, grouped by category.
+    </p>
+
+    <div class="mt-8 flex flex-wrap items-center gap-3">
+      <p id="sort-label" class="font-mono text-sm font-bold uppercase tracking-widest">Sort by</p>
+      <div role="group" aria-labelledby="sort-label" class="flex flex-wrap gap-3">
+        <button
+          type="button"
+          data-sort="name"
+          aria-pressed="true"
+          class="cursor-pointer border-2 border-ink bg-paper px-4 py-2 font-extrabold uppercase transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tabloid-red aria-pressed:bg-tabloid-yellow aria-pressed:shadow-tabloid"
+        >
+          Category name (A-Z)
+        </button>
+        <button
+          type="button"
+          data-sort="weirdness"
+          aria-pressed="false"
+          class="cursor-pointer border-2 border-ink bg-paper px-4 py-2 font-extrabold uppercase transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-tabloid-red aria-pressed:bg-tabloid-yellow aria-pressed:shadow-tabloid"
+        >
+          Weirdness factor
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-12 space-y-16" data-category-list>
+      {
+        categories.map((category) => (
+          <section
+            id={category.slug}
+            class="scroll-mt-6"
+            data-category-group
+            data-category={category.name}
+            data-top-weird={category.topWeird}
+          >
+            <h2 class="mb-6 border-b-4 border-ink pb-4 font-headline text-4xl uppercase leading-[0.95] md:text-5xl">
+              {category.name}
+              <span class="mt-3 block font-mono text-sm font-bold tracking-wide">
+                {category.count} {category.count === 1 ? 'stock' : 'stocks'}
+                <span class="text-tabloid-red" aria-hidden="true">
+                  {' '}
+                  ·{' '}
+                </span>
+                Top weird factor {category.topWeird}/10
+              </span>
+            </h2>
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3" data-stock-grid>
+              {category.stocks.map((stock) => (
+                <StockCard
+                  ticker={stock.data.ticker}
+                  category={stock.data.category}
+                  company={stock.data.company}
+                  headline={stock.data.headline}
+                  weirdFactor={stock.data.weirdFactor}
+                  href={`/stocks/${stock.id}/`}
+                  heading="h3"
+                  stretch
+                  publishTime={stock.data.publishDate.getTime()}
+                />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </main>
+</Layout>
+
+<script>
+  const list = document.querySelector<HTMLElement>('[data-category-list]');
+  const nameButton = document.querySelector<HTMLButtonElement>('[data-sort="name"]');
+  const weirdButton = document.querySelector<HTMLButtonElement>('[data-sort="weirdness"]');
+
+  if (list && nameButton && weirdButton) {
+    const byText = (left: string, right: string) => left.localeCompare(right, 'en');
+
+    const applySort = (mode: 'name' | 'weirdness') => {
+      const groups = [...list.querySelectorAll<HTMLElement>('[data-category-group]')];
+
+      groups.sort((a, b) => {
+        if (mode === 'weirdness') {
+          const weirdDiff = Number(b.dataset.topWeird) - Number(a.dataset.topWeird);
+          if (weirdDiff !== 0) return weirdDiff;
+        }
+        return byText(a.dataset.category ?? '', b.dataset.category ?? '');
+      });
+
+      for (const group of groups) {
+        const grid = group.querySelector<HTMLElement>('[data-stock-grid]');
+        if (!grid) continue;
+
+        const cards = [...grid.querySelectorAll<HTMLElement>('[data-stock-card]')];
+        cards.sort((a, b) => {
+          if (mode === 'weirdness') {
+            const weirdDiff = Number(b.dataset.weird) - Number(a.dataset.weird);
+            if (weirdDiff !== 0) return weirdDiff;
+            return byText(a.dataset.ticker ?? '', b.dataset.ticker ?? '');
+          }
+
+          const dateDiff = Number(b.dataset.publish) - Number(a.dataset.publish);
+          if (dateDiff !== 0) return dateDiff;
+          return byText(a.dataset.ticker ?? '', b.dataset.ticker ?? '');
+        });
+
+        for (const card of cards) grid.append(card);
+        list.append(group);
+      }
+
+      const weirdness = mode === 'weirdness';
+      nameButton.setAttribute('aria-pressed', weirdness ? 'false' : 'true');
+      weirdButton.setAttribute('aria-pressed', weirdness ? 'true' : 'false');
+      list.dataset.sorted = mode;
+    };
+
+    const writeUrl = (mode: 'name' | 'weirdness') => {
+      const url = new URL(window.location.href);
+      if (mode === 'weirdness') url.searchParams.set('sort', 'weirdness');
+      else url.searchParams.delete('sort');
+      history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+    };
+
+    nameButton.addEventListener('click', () => {
+      applySort('name');
+      writeUrl('name');
+    });
+
+    weirdButton.addEventListener('click', () => {
+      applySort('weirdness');
+      writeUrl('weirdness');
+    });
+
+    const initial = new URLSearchParams(window.location.search).get('sort') === 'weirdness' ? 'weirdness' : 'name';
+    applySort(initial);
+  }
+</script>
