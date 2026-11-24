@@ -51,7 +51,10 @@ const categories = [...grouped.entries()]
   .sort((a, b) => a.name.localeCompare(b.name, 'en'));
 ---
 
-<Layout title="Categories | Weird Stocks">
+<Layout
+  title="Categories | Weird Stocks"
+  description="Every weird stock, grouped by category."
+>
   <main class="mx-auto max-w-7xl px-6 py-12 md:py-20">
     <h1
       class="inline-block -rotate-1 bg-tabloid-red px-4 py-2 font-headline text-4xl uppercase text-paper shadow-tabloid md:text-5xl"

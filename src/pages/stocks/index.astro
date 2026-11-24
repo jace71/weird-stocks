@@ -10,7 +10,10 @@ const stocks = (await getCollection('stocks')).sort((a, b) => {
 });
 ---
 
-<Layout title="All Weird Stocks">
+<Layout
+  title="All Weird Stocks"
+  description="The whole archive of weird stocks, newest stories first."
+>
   <main class="mx-auto max-w-7xl px-6 py-12 md:py-20">
     <h1
       class="inline-block -rotate-1 bg-tabloid-yellow px-4 py-2 font-headline text-4xl uppercase shadow-tabloid md:text-5xl"
