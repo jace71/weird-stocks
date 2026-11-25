@@ -7,21 +7,22 @@ export const defaultDescription =
 export const defaultOgImage = '/og.png';
 
 const gaIdPattern = /^G-[A-Z0-9]+$/;
+const defaultGoogleAnalyticsId = 'G-JNVPP818JB';
 let warnedAboutGaId = false;
 
-export function googleAnalyticsId(): string | undefined {
+export function googleAnalyticsId(): string {
   const fromVite = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
   const fromProcess = typeof process !== 'undefined' ? process.env.PUBLIC_GA_MEASUREMENT_ID : undefined;
   const raw = firstNonEmpty(fromVite, fromProcess);
-  if (!raw) return undefined;
+  if (!raw) return defaultGoogleAnalyticsId;
   if (!gaIdPattern.test(raw)) {
     if (!warnedAboutGaId) {
       warnedAboutGaId = true;
       console.warn(
-        `PUBLIC_GA_MEASUREMENT_ID must look like G-XXXXXXXX. Received "${raw}". The analytics tag was left out of this build.`,
+        `PUBLIC_GA_MEASUREMENT_ID must look like G-XXXXXXXX. Received "${raw}". Using ${defaultGoogleAnalyticsId}.`,
       );
     }
-    return undefined;
+    return defaultGoogleAnalyticsId;
   }
   return raw;
 }
