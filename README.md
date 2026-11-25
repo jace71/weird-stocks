@@ -23,11 +23,12 @@ Server-side key for end-of-day prices, fetched at build time. It has no `PUBLIC_
 
 ### `PUBLIC_GA_MEASUREMENT_ID`
 
-Optional Google Analytics 4 measurement ID, shaped like `G-XXXXXXXXXX`.
+Optional override for the Google Analytics 4 measurement ID, shaped like `G-XXXXXXXXXX`.
 
-- When this variable is unset or blank at build time, the site does not render an analytics tag and does not load any Google script.
+- Every HTML page includes the GA4 gtag. When this variable is unset or blank at build time, the tag uses `G-JNVPP818JB`.
+- When it is set to a valid measurement ID, that ID is used instead.
 - Astro inlines `PUBLIC_` variables during `npm run build`. A value in `.env` only affects local builds. For production, add `PUBLIC_GA_MEASUREMENT_ID` to this app's environment variables in the Amplify console, then rebuild. No change to `amplify.yml` is required.
-- A value that is not a `G-` measurement ID is ignored, and the build prints a warning.
+- A value that is not a `G-` measurement ID is ignored, the build prints a warning, and the tag falls back to `G-JNVPP818JB`.
 
 ## Search and feeds
 

@@ -31,7 +31,7 @@ const stockPublishDates = (async () => {
  */
 function includeInSitemap(page) {
   const pathname = new URL(page).pathname.replace(/\/$/, '') || '/';
-  if (pathname === '/rss.xml' || pathname === '/robots.txt' || pathname === '/og.png') return false;
+  if (pathname === '/rss.xml' || pathname === '/robots.txt' || pathname === '/og.png' || pathname === '/404') return false;
   if (pathname.startsWith('/og/')) return false;
   return true;
 }

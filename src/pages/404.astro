@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Page not found | Weird Stocks" description="That page isn't in the Weird Stocks archive.">
+  <main class="mx-auto max-w-3xl px-6 py-16 md:py-24">
+    <p class="mb-4 inline-block -rotate-1 bg-tabloid-red px-4 py-2 font-headline text-2xl uppercase text-paper shadow-tabloid">
+      Missing ticker
+    </p>
+    <h1 class="font-headline text-5xl uppercase leading-[0.95] tracking-tight text-ink md:text-7xl">
+      Page not found
+    </h1>
+    <p class="mt-6 text-lg leading-relaxed text-ink/80">
+      This page isn't in the archive. The weird stuff is still on the homepage.
+    </p>
+    <a
+      class="mt-8 inline-block border-2 border-ink bg-tabloid-yellow px-5 py-3 font-extrabold uppercase shadow-tabloid transition-transform hover:-translate-y-0.5"
+      href="/"
+    >
+      Back to Weird Stocks
+    </a>
+  </main>
+</Layout>
