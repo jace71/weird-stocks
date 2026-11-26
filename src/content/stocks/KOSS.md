@@ -9,7 +9,7 @@ weirdFactor: 7
 marketCap: ""
 exchange: "NASDAQ"
 publishDate: 2026-11-22
-featured: true
+featured: false
 ---
 
 Before earbuds, before the Walkman, there was a pair of headphones from Milwaukee. Koss Corporation says its founder, John C. Koss, created the personal listening industry when the company made its first SP/3 stereo headphones in 1958. The company is still around, still based in Milwaukee, and its ticker is simply KOSS.
