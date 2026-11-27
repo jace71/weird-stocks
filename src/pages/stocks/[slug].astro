@@ -35,6 +35,7 @@ const publishedDate = stock.data.publishDate.toLocaleDateString('en-US', {
   ogType="article"
   publishedTime={isoDate(stock.data.publishDate)}
   jsonLd={articleJsonLd(stock)}
+  breadcrumbName={stock.data.company}
 >
   <main class="mx-auto max-w-5xl px-6 py-12 md:py-20">
     <article>

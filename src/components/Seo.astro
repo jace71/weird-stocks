@@ -16,6 +16,7 @@ interface Props {
   ogType?: 'website' | 'article';
   publishedTime?: string;
   jsonLd?: unknown;
+  breadcrumbJsonLd?: unknown;
 }
 
 const {
@@ -26,6 +27,7 @@ const {
   ogType = 'website',
   publishedTime,
   jsonLd,
+  breadcrumbJsonLd,
 } = Astro.props;
 
 const canonical = canonicalUrl(Astro.url.pathname, Astro.site);
@@ -33,6 +35,7 @@ const imageUrl = absoluteUrl(image, Astro.site);
 const rssUrl = absoluteUrl('/rss.xml', Astro.site);
 const sitemapUrl = absoluteUrl('/sitemap-index.xml', Astro.site);
 const structuredData = jsonLd === undefined ? undefined : jsonLdScript(jsonLd);
+const breadcrumbData = breadcrumbJsonLd === undefined ? undefined : jsonLdScript(breadcrumbJsonLd);
 ---
 
 <title>{title}</title>
@@ -61,3 +64,4 @@ const structuredData = jsonLd === undefined ? undefined : jsonLdScript(jsonLd);
 <meta name="twitter:image:alt" content={imageAlt} />
 
 {structuredData && <Fragment set:html={structuredData} />}
+{breadcrumbData && <Fragment set:html={breadcrumbData} />}
