@@ -21,7 +21,10 @@ const recentStocks = [...stocks]
   description={defaultDescription}
   jsonLd={websiteJsonLd()}
 >
-  <main class="mx-auto max-w-7xl px-6 py-12 md:py-20">
+  <main class="mx-auto max-w-7xl px-6 pb-12 pt-7 md:pb-20 md:pt-10">
+    <p class="mb-7 block w-fit max-w-full whitespace-nowrap border-2 border-ink bg-tabloid-yellow py-[0.4rem] pl-[0.6rem] pr-[0.7rem] font-headline text-[1.0625rem] uppercase leading-none tracking-tight text-ink shadow-tabloid md:mb-10 md:px-[0.85rem] md:py-[0.45rem] md:text-[1.75rem]">
+      Learning economics one weird stock at a time.
+    </p>
     <div class="grid gap-12 lg:grid-cols-3 lg:items-start lg:gap-8">
       {stockOfTheWeek && (
         <section
